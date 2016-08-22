@@ -1,0 +1,35 @@
+{
+  "name": "demo-landscape",
+  "version": "0.0.0",
+  "repository": "github.com:Ramshackle-Jamathon/demo-landscape.git",
+  "author": "Joseph Van Drunen <josephvandrunen@gmail.com>",
+  "keywords": [
+    "webgl",
+    "raymarching"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "scripts": {
+    "dev": "beefy ./index.js"
+  },
+  "dependencies": {
+    "a-big-triangle": "^1.0.2",
+    "gl-buffer": "^2.1.2",
+    "gl-matrix": "^2.3.2",
+    "gl-now": "^1.4.0",
+    "gl-shader": "^4.2.0",
+    "gl-vao": "^1.3.0",
+    "glslify": "^5.1.0",
+    "glslify-hex": "^2.0.1",
+    "stats.js": "^0.16.0"
+  },
+  "devDependencies": {
+    "browserify": "^13.1.0",
+    "beefy": "2.1.8"
+  },
+  "browserify": {
+    "transform": [
+      "glslify"
+    ]
+  }
+}
