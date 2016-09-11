@@ -10,7 +10,7 @@
   "license": "MIT",
   "main": "index.js",
   "scripts": {
-    "build": "browserify index.js > dist/bundle.js",
+    "build": "browserify index.js > dist/bundle.js && cp index.html dist/",
     "dev": "budo index.js --open"
   },
   "dependencies": {
