@@ -2,45 +2,69 @@ var glslify = require("glslify");
 var createVAO = require("gl-vao");
 var createShader = require("gl-shader");
 var createBuffer = require("gl-buffer");
-var flyCamera = require("gl-flightControls");
+var flyCamera = require("gl-flyCamera");
 var glMatrix = require("gl-matrix");
 
-var Stats = require("stats.js");
 
+var Stats = require("stats.js");
 var stats = new Stats();
 document.body.appendChild( stats.dom );
 
-controls = new flyCamera();
+controls = new flyCamera({
+	position: [1, 6, 0],
+	movementSpeed: 50,
+	rollSpeed: Math.PI / 4
+});
 controls.start();
+
 var canvas = document.body.appendChild(document.createElement("canvas"));
-var quality = 0.5;
 canvas.width  = window.innerWidth * quality;
 canvas.height = window.innerHeight * quality;
 canvas.style.width  = "100%";
 canvas.style.height = "100%";
+
+
 var gl = createContext(canvas, render);
 var renderOpts = init(gl);
-function renderLoop(){
+
+var defaultQuality = 1;
+var quality = defaultQuality;
+var lastTimeStamp = 0;
+var startTime;
+var ellapsedTime;
+function renderLoop(timeStamp){
+	if(!startTime){
+		startTime = timeStamp;
+	}
+	ellapsedTime = timeStamp - startTime;
+	var dt = timeStamp - lastTimeStamp;
+	lastTimeStamp = timeStamp;
+
+	if (ellapsedTime < 5000 && dt > 30.0){
+		quality = quality - 0.01;
+		resizeCanvas(quality);
+	}
+	renderOpts.dt = dt;
 	gl.render(renderOpts);
 	window.requestAnimationFrame(renderLoop);
 }
 window.requestAnimationFrame(renderLoop);
 
-
 window.addEventListener( "resize", function(){
 	var canvas = gl.canvas;
+	quality = defaultQuality;
 
 	var displayWidth  = window.innerWidth * quality;
 	var displayHeight = window.innerHeight * quality;
 
 	if (canvas.width  !== displayWidth || canvas.height !== displayHeight) {
-
-		canvas.width  = displayWidth;
-		canvas.height = displayHeight;
-
-		gl.viewport(0, 0, canvas.width, canvas.height);
+		startTime = 0;
+		resizeCanvas(quality);
 	}
 }); 
+
+
+
 
 
 
@@ -74,7 +98,7 @@ function render(gl, opts){
 	var shader = opts.shader;
 	var buffer = opts.buffer;
 
-	controls.update();
+	controls.update(opts.dt);
 	stats.begin();
 
 	//Bind shader
@@ -111,6 +135,13 @@ function render(gl, opts){
 	stats.end();
 }
 
+
+function resizeCanvas(quality) {
+	canvas.width  = window.innerWidth * quality;
+	canvas.height = window.innerHeight * quality;
+	gl.viewport(0, 0, canvas.width, canvas.height);
+}
+
 function createContext(canvas, render) {
 	var gl = (
 		canvas.getContext("webgl") ||
@@ -131,3 +162,16 @@ function createContext(canvas, render) {
 	return gl;
 }
 
+
+window.addEventListener( "keydown", function (event) {
+	if ( event.altKey ) {
+			return;
+	}
+	event.preventDefault();
+	if( event.shiftKey ){
+		switch ( event.keyCode ) {
+			case 187: /* + */ quality += 0.05; resizeCanvas(quality); break;
+			case 189: /* - */ quality -= 0.05; resizeCanvas(quality); break;
+		}
+	}
+});
