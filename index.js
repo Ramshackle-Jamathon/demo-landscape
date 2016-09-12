@@ -1,5 +1,4 @@
 var glslify = require("glslify");
-var createVAO = require("gl-vao");
 var createShader = require("gl-shader");
 var createBuffer = require("gl-buffer");
 var flyCamera = require("gl-flyCamera");
@@ -40,7 +39,7 @@ function renderLoop(timeStamp){
 	var dt = timeStamp - lastTimeStamp;
 	lastTimeStamp = timeStamp;
 
-	if (ellapsedTime < 5000 && dt > 30.0){
+	if (ellapsedTime < 5000 && dt > 45.0){
 		quality = quality - 0.01;
 		resizeCanvas(quality);
 	}

@@ -226,7 +226,7 @@ vec3 PostEffects(vec3 rgb, vec2 uv)
 //--------------------------------------------------------------------------
 void main()
 {
-    vec2 uv =(-1.0 + 2.0 * vPos); // get fragment location
+    vec2 uv = vPos; // get fragment location
     uv.x *= uResolution.x / uResolution.y;// correct for aspect ratio
 
     //camera vectors (position, look, up)
@@ -240,7 +240,7 @@ void main()
     vec3 uu = normalize( cross(ww, cUp) );
     vec3 vv = normalize( cross(uu, ww) );
     
-    vec3 rd = normalize( uv.x*uu + uv.y*vv + 4.0*ww ); //direction of our ray
+    vec3 rd = normalize( uv.x*uu + uv.y*vv + ww ); //direction of our ray
 
     vec3 col;
     float distance;
