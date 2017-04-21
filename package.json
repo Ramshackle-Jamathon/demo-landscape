@@ -23,7 +23,7 @@
     "stats.js": "^0.17.0"
   },
   "devDependencies": {
-    "budo": "^9.4.1",
+    "budo": "^10.0.2",
     "browserify": "^13.3.0"
   },
   "browserify": {
